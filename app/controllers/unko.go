@@ -32,6 +32,18 @@ func (c *Unko) List() revel.Result {
 	})
 }
 
+func (c *Unko) Show(id int) revel.Result {
+	greeting := "Super Mother Fucing Hage!!"
+	unko := "unko"
+	return c.RenderJson(map[string]interface{}{
+		"id":       id,
+		"Count":    4,
+		"unko":     unko,
+		"greeting": greeting,
+		"Status":   "Successfully uploaded",
+	})
+}
+
 func (c *Unko) Index() revel.Result {
 	greeting := "Super Mother Fucing Hage!!"
 	unko := "unko"

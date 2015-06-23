@@ -7,9 +7,10 @@ module:testrunner
 GET     /                                       App.Index
 
 GET     /unko                                   Unko.Index
-
 GET     /unko/list                              Unko.List
 GET     /unko/list.json                         Unko.List
+GET     /unko/show/:id                         Unko.Show
+GET     /unko/show/:id.json                         Unko.Show
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
