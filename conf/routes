@@ -9,8 +9,9 @@ GET     /                                       App.Index
 GET     /unko                                   Unko.Index
 GET     /unko/list                              Unko.List
 GET     /unko/list.json                         Unko.List
-GET     /unko/show/:id                         Unko.Show
-GET     /unko/show/:id.json                         Unko.Show
+GET     /unko/show/:id                          Unko.Show
+GET     /unko/show/:id.json                     Unko.Show
+POST    /unko/cancel/:id                        Unko.Cancel
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

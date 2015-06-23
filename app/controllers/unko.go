@@ -2,19 +2,14 @@ package controllers
 
 import (
 	//	"bytes"
-	//	"fmt"
+	"fmt"
 	//	"image"
 	//	_ "image/jpeg"
 	//	_ "image/png"
-
+	//	"encoding/json"
 	"github.com/revel/revel"
-)
-
-const (
-	_      = iota
-	KB int = 1 << (10 * iota)
-	MB
-	GB
+	"goassimp/app/models"
+	"goassimp/app/routes"
 )
 
 type Unko struct {
@@ -33,15 +28,14 @@ func (c *Unko) List() revel.Result {
 }
 
 func (c *Unko) Show(id int) revel.Result {
-	greeting := "Super Mother Fucing Hage!!"
-	unko := "unko"
-	return c.RenderJson(map[string]interface{}{
-		"id":       id,
-		"Count":    4,
-		"unko":     unko,
-		"greeting": greeting,
-		"Status":   "Successfully uploaded",
-	})
+	oem := models.Oembed{Version: 1, Type: "fuga"}
+	return c.RenderJson(oem)
+}
+
+func (c *Unko) Cancel(id int) revel.Result {
+	c.Flash.Success(fmt.Sprintln("Booking cancelled for confirmation number", id))
+	return c.Redirect(routes.Unko.Index())
+	//return c.RenderText("unko")
 }
 
 func (c *Unko) Index() revel.Result {
