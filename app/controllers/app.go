@@ -1,6 +1,7 @@
 package controllers
 
 import "github.com/revel/revel"
+import "fmt"
 
 type App struct {
 	*revel.Controller
@@ -16,16 +17,17 @@ type FileInfo struct {
 }
 
 func (c App) Index() revel.Result {
+	var id string = c.Params.Get("id")
+	fmt.Println(id)
 	return c.Render()
 }
 
-func (c *App) Before() revel.Result {
-	// Rendering useful info here.
-	c.RenderArgs["action"] = c.Controller.Action
-
-	return nil
-}
-
-func init() {
-	revel.InterceptMethod((*App).Before, revel.BEFORE)
-}
+//func (c *App) Before() revel.Result {
+//	// Rendering useful info here.
+//	c.RenderArgs["action"] = c.Controller.Action
+//	return nil
+//}
+//
+//func init() {
+//	revel.InterceptMethod((*App).Before, revel.BEFORE)
+//}

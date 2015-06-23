@@ -2,20 +2,11 @@ package controllers
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/revel/revel"
-	//	"goassimp/app/routes"
-	//	"image"
-	//	_ "image/jpeg"
-	//	_ "image/png"
+	"goassimp/app/routes"
 	"io"
 	"os"
-)
-
-const (
-	_      = iota
-	KB int = 1 << (10 * iota)
-	MB
-	GB
 )
 
 type Single struct {
@@ -40,7 +31,11 @@ func (c *Single) HandleUpload(avatar []byte) revel.Result {
 		panic(err)
 	}
 
-	return c.RenderJson(map[string]interface{}{
-		"Status": "Successfully uploaded",
-	})
+	fmt.Println("Status: Successfully uploaded")
+
+	return c.Redirect(routes.Single.Upload())
+
+	//	return c.RenderJson(map[string]interface{}{
+	//		"Status": "Successfully uploaded"
+	//	})
 }
