@@ -21,6 +21,17 @@ type Unko struct {
 	App
 }
 
+func (c *Unko) List() revel.Result {
+	greeting := "Super Mother Fucing Hage!!"
+	unko := "unko"
+	return c.RenderJson(map[string]interface{}{
+		"Count":    4,
+		"unko":     unko,
+		"greeting": greeting,
+		"Status":   "Successfully uploaded",
+	})
+}
+
 func (c *Unko) Index() revel.Result {
 	greeting := "Super Mother Fucing Hage!!"
 	unko := "unko"
