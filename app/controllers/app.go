@@ -1,26 +1,23 @@
 package controllers
 
 import "github.com/revel/revel"
-import "fmt"
 
 type App struct {
 	*revel.Controller
 }
 
-type FileInfo struct {
-	ContentType string
-	Filename    string
-	RealFormat  string `json:",omitempty"`
-	Resolution  string `json:",omitempty"`
-	Size        int
-	Status      string `json:",omitempty"`
-}
-
 func (c App) Index() revel.Result {
-	var id string = c.Params.Get("id")
-	fmt.Println(id)
 	return c.Render()
 }
+
+//type FileInfo struct {
+//	ContentType string
+//	Filename    string
+//	RealFormat  string `json:",omitempty"`
+//	Resolution  string `json:",omitempty"`
+//	Size        int
+//	Status      string `json:",omitempty"`
+//}
 
 //func (c *App) Before() revel.Result {
 //	// Rendering useful info here.

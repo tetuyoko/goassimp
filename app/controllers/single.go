@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/revel/revel"
-	"goassimp/app/routes"
+	//"goassimp/app/routes"
 	"io"
 	"os"
 )
@@ -14,6 +14,8 @@ type Single struct {
 }
 
 func (c *Single) Upload() revel.Result {
+	var id string = c.Params.Get("id")
+	fmt.Println(id)
 	return c.Render()
 }
 
@@ -33,9 +35,7 @@ func (c *Single) HandleUpload(avatar []byte) revel.Result {
 
 	fmt.Println("Status: Successfully uploaded")
 
-	return c.Redirect(routes.Single.Upload())
-
-	//	return c.RenderJson(map[string]interface{}{
-	//		"Status": "Successfully uploaded"
-	//	})
+	return c.RenderJson(map[string]interface{}{
+		"Status": "Successfully uploaded",
+	})
 }
