@@ -6,6 +6,8 @@ module:testrunner
 
 GET     /                                       App.Index
 
+GET     /unko                                   App.Unko
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 
