@@ -2,60 +2,50 @@ package main
 
 import (
 	"fmt"
-	"gopkg.in/redis.v3"
+	"log"
+	"time"
+
+	"github.com/garyburd/redigo/redis"
+	"github.com/youtube/vitess/go/pools"
+	"golang.org/x/net/context"
 )
+
+// ResourceConn adapts a Redigo connection to a Vitess Resource.
+type ResourceConn struct {
+	redis.Conn
+}
+
+func (r ResourceConn) Close() {
+	r.Conn.Close()
+}
 
 var (
-	RedisClient *redis.Client
+	pool *pools.ResourcePool
 )
 
+func initRedisPool() {
+	pool = pools.NewResourcePool(func() (pools.Resource, error) {
+		c, err := redis.Dial("tcp", ":6379")
+		return ResourceConn{c}, err
+	}, 1, 2, time.Minute)
+	defer pool.Close()
+}
+
 func main() {
-	Init()
-	Ping()
-	SetGet()
-}
+	fmt.Println("hoge")
+	initRedisPool()
 
-func Init() {
-	RedisClient = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
-	})
-}
-
-func Ping() {
-	pong, err := RedisClient.Ping().Result()
+	ctx := context.TODO()
+	resource, err := pool.Get(ctx)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
-	fmt.Println(pong)
-}
+	defer pool.Put(resource)
 
-func SetGet() {
-	err := RedisClient.Set("gokey", "value", 0).Err()
+	client := resource.(ResourceConn)
+	n, err := client.Do("INFO")
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
-
-	val, err := RedisClient.Get("gokey").Result()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("key", val)
-
-	val2, err := RedisClient.Get("gokey2").Result()
-	if err == redis.Nil {
-		fmt.Println("key2 does not exists")
-	} else if err != nil {
-		panic(err)
-	} else {
-		fmt.Println("gokey2", val2)
-	}
-	// Output:
-	// key
-	// value
-	// key2
-	// does
-	// not
-	// exists
+	log.Printf("info=%s", n)
 }

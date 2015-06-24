@@ -2,7 +2,6 @@ package app
 
 import (
 	"github.com/revel/revel"
-	"gopkg.in/redis.v3"
 )
 
 func init() {
@@ -24,7 +23,7 @@ func init() {
 
 	// register startup functions with OnAppStart
 	// ( order dependent )
-	// revel.OnAppStart(InitDB)
+	revel.OnAppStart(Test)
 	// revel.OnAppStart(FillCache)
 }
 
