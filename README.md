@@ -4,15 +4,13 @@
 ~~~
  % brew install go --with-cc-common
  % brew install gpm
- % gpm
+ % cd app & gpm
  % revel run goassimp
 ~~~
 
 ## When Add Library
 ~~~
  $ brew tap pote/gpm_plugins
- $ brew install gpm-bootstrap
- % brew install go --with-cc-common
 ~~~
 
 ### Start the web server:
