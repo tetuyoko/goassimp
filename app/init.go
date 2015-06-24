@@ -23,7 +23,7 @@ func init() {
 
 	// register startup functions with OnAppStart
 	// ( order dependent )
-	revel.OnAppStart(Test)
+	revel.OnAppStart(InitRedisPool)
 	// revel.OnAppStart(FillCache)
 }
 

@@ -1,15 +1,12 @@
 package app
 
 import (
-	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"time"
 
 	"github.com/garyburd/redigo/redis"
 	"github.com/youtube/vitess/go/pools"
-	"golang.org/x/net/context"
 )
 
 // ResourceConn adapts a Redigo connection to a Vitess Resource.
@@ -40,26 +37,26 @@ func newPool(server string) *pools.ResourcePool {
 	return pools.NewResourcePool(f, capacity, RedisMaxCap, idleTimeout)
 }
 
-func Test() {
+func InitRedisPool() {
 	pool = newPool(":6379")
 	defer pool.Close()
 
-	ctx := context.TODO()
-	resource, err := pool.Get(ctx)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer pool.Put(resource)
+	//ctx := context.TODO()
+	//resource, err := pool.Get(ctx)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//defer pool.Put(resource)
 
-	conn := resource.(ResourceConn)
-	defer conn.Close()
+	//conn := resource.(ResourceConn)
+	//defer conn.Close()
 
-	n, err := conn.Do("INFO")
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("han")
-	log.Printf("info=%s", n)
+	//n, err := conn.Do("INFO")
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//fmt.Println("han")
+	//log.Printf("info=%s", n)
 }
 
 func redisConnParams() (capacity int, maxCap int, idleTimeout time.Duration) {

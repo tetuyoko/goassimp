@@ -6,38 +6,44 @@ import (
 	"golang.org/x/net/context"
 )
 
-type DB struct {
-	p *pools.ResourcePool
-}
-
-func newDB(p *pools.ResourcePool) *DB {
-	return &DB{p}
+type RedisDB struct {
+	pool *pools.ResourcePool
 }
 
 type pooledConn struct {
 	*ResourceConn
-	p *pools.ResourcePool
+	pool *pools.ResourcePool
 }
 
 func (wc *pooledConn) Close() {
-	wc.p.Put(wc.ResourceConn)
+	wc.pool.Put(wc.ResourceConn)
 }
 
-func (db *DB) conn() (*pooledConn, error) {
+func InitRedis() {
+	pool = newPool(":6379")
+	defer pool.Close()
+	db := newRedisDB(pool)
+	defer db.Close()
+}
+
+func newRedisDB(pool *pools.ResourcePool) *RedisDB {
+	return &RedisDB{pool}
+}
+
+func (db *RedisDB) conn() (*pooledConn, error) {
 	ctx := context.TODO()
-	r, err := db.p.Get(ctx)
+	r, err := db.pool.Get(ctx)
 	if err != nil {
 		return nil, err
 	}
 	c := r.(*ResourceConn)
-	return &pooledConn{c, db.p}, nil
+	return &pooledConn{c, db.pool}, nil
+}
+func (db *RedisDB) Close() {
+	db.pool.Close()
 }
 
-func (db *DB) Close() {
-	db.p.Close()
-}
-
-func (db *DB) Ping() (string, error) {
+func (db *RedisDB) Ping() (string, error) {
 	c, err := db.conn()
 	if err != nil {
 		return "", err
@@ -51,7 +57,7 @@ func (db *DB) Ping() (string, error) {
 	return name, err
 }
 
-//func (db *DB) LoadUser(id int) (*User, error) {
+//func (db *RedisDB) LoadUser(id int) (*User, error) {
 //	c, err := db.conn()
 //	if err != nil {
 //		return nil, err
