@@ -44,8 +44,6 @@ func Test() {
 	pool = newPool(":6379")
 	defer pool.Close()
 
-	fmt.Println("hoge")
-
 	ctx := context.TODO()
 	resource, err := pool.Get(ctx)
 	if err != nil {
