@@ -9,6 +9,8 @@ type App struct {
 }
 
 func (c App) Index() revel.Result {
+	//*revel.db.Ping()
+
 	return c.Render()
 }
 

@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/revel/revel"
+	"goassimp/app/redis"
 )
 
 func init() {
@@ -23,7 +24,7 @@ func init() {
 
 	// register startup functions with OnAppStart
 	// ( order dependent )
-	revel.OnAppStart(InitRedisPool)
+	revel.OnAppStart(redis.InitRedis)
 	// revel.OnAppStart(FillCache)
 }
 

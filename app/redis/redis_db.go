@@ -1,9 +1,15 @@
-package app
+package redis
 
 import (
-	"github.com/garyburd/redigo/redis"
+	"log"
+
+	//	"github.com/garyburd/redigo/redis"
 	"github.com/youtube/vitess/go/pools"
 	"golang.org/x/net/context"
+)
+
+var (
+	db *RedisDB
 )
 
 type RedisDB struct {
@@ -20,10 +26,24 @@ func (wc *pooledConn) Close() {
 }
 
 func InitRedis() {
-	pool = newPool(":6379")
+	pool := newPool(":6379")
 	defer pool.Close()
 	db := newRedisDB(pool)
-	defer db.Close()
+	ctx := context.TODO()
+	r, err := db.pool.Get(ctx)
+	if err != nil {
+		//return nil, err
+		log.Fatal(err)
+	}
+	c := r.(*ResourceConn)
+
+	name, err := c.Do("INFO")
+	if err != nil {
+		log.Fatal(err)
+		//panic(err)
+	}
+	name = "hage"
+	log.Printf("info=%s", name)
 }
 
 func newRedisDB(pool *pools.ResourcePool) *RedisDB {
@@ -39,23 +59,27 @@ func (db *RedisDB) conn() (*pooledConn, error) {
 	c := r.(*ResourceConn)
 	return &pooledConn{c, db.pool}, nil
 }
+
 func (db *RedisDB) Close() {
 	db.pool.Close()
 }
 
-func (db *RedisDB) Ping() (string, error) {
-	c, err := db.conn()
-	if err != nil {
-		return "", err
-	}
-	defer c.Close()
-
-	name, err := redis.String(c.Do("INFO"))
-	if err != nil {
-		return "", err
-	}
-	return name, err
-}
+//func (db *RedisDB) Ping() {
+//	c, err := db.conn()
+//	if err != nil {
+//		log.Fatal(err)
+//		//	panic(err)
+//	}
+//	defer c.Close()
+//
+//	name, err := c.Do("INFO")
+//	if err != nil {
+//		log.Fatal(err)
+//		//panic(err)
+//	}
+//	name = "hage"
+//	log.Printf("info=%s", name)
+//}
 
 //func (db *RedisDB) LoadUser(id int) (*User, error) {
 //	c, err := db.conn()
