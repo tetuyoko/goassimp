@@ -5,6 +5,7 @@ import (
 	"goassimp/app/redis"
 )
 
+var HOGE string
 
 func init() {
 	// Filters is the default set of global filters.
@@ -26,10 +27,13 @@ func init() {
 	// register startup functions with OnAppStart
 	// ( order dependent )
 	revel.OnAppStart(redis.InitRedis)
+	revel.OnAppStart(InitStr)
 	// revel.OnAppStart(FillCache)
 }
 
-
+func InitStr() {
+	HOGE = "huga"
+}
 
 // TODO turn this into revel.HeaderFilter
 // should probably also have a filter for CSRF

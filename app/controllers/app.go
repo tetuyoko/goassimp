@@ -2,7 +2,8 @@ package controllers
 
 import (
 	"github.com/revel/revel"
-	//"goassimp/app/redis"
+	//	"goassimp/app/redis"
+	//	"goassimp/app"
 )
 
 type App struct {
@@ -10,9 +11,8 @@ type App struct {
 }
 
 func (c App) Index() revel.Result {
-	//*revel.db.Ping()
-	//redis.Huga()
 	return c.Render()
+	//return c.Render()
 }
 
 //type FileInfo struct {

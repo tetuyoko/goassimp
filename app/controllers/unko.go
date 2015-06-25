@@ -8,8 +8,11 @@ import (
 	//	_ "image/png"
 	//	"encoding/json"
 	"github.com/revel/revel"
+	"goassimp/app"
 	"goassimp/app/models"
 	"goassimp/app/routes"
+
+	"goassimp/app/redis"
 )
 
 type Unko struct {
@@ -40,7 +43,12 @@ func (c *Unko) Cancel(id int) revel.Result {
 
 func (c *Unko) Index() revel.Result {
 	greeting := "Super Mother Fucing Hage!!"
-	unko := "unko"
+	info, err := redis.RedisDb.Ping()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%s", info)
+	unko := app.HOGE
 	return c.Render(greeting, unko)
 }
 

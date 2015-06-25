@@ -1,17 +1,16 @@
 package redis
 
 import (
+	"fmt"
 	"github.com/youtube/vitess/go/pools"
 	"golang.org/x/net/context"
-//	"github.com/garyburd/redigo/redis"
-	"fmt"
 )
 
 type RedisDB struct {
 	pool *pools.ResourcePool
 }
 
-var redisDB *RedisDB
+var RedisDb *RedisDB
 
 type pooledConn struct {
 	ResourceConn
@@ -28,16 +27,10 @@ func (db *RedisDB) Close() {
 
 func InitRedis() {
 	p := newPool(":6379")
-	defer p.Close()
-	redisDB = newRedisDB(p)
-	defer redisDB.Close()
-	info, err := redisDB.Ping()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("%s", info)
-
-	info, err = redisDB.Ping()
+	//defer p.Close()
+	RedisDb = newRedisDB(p)
+	//defer RedisDb.Close()
+	info, err := RedisDb.Ping()
 	if err != nil {
 		panic(err)
 	}
@@ -48,31 +41,16 @@ func newRedisDB(pool *pools.ResourcePool) *RedisDB {
 	return &RedisDB{pool}
 }
 
-func Huga() (interface{}, error) {
-	pc, err := redisDB.conn()
-	defer pc.Put()
-	if err != nil {
-		return "", err
-	}
-	info, err := pc.Do("INFO")
-	//info, err := redis.String(pc.Do("INFO"))
-	if err != nil {
-		return "", err
-	}
-
-	return info, err
-}
-
 func (db *RedisDB) Ping() (interface{}, error) {
 	pc, err := db.conn()
-	defer pc.Put()
 	if err != nil {
 		return "", err
 	}
+	defer pc.Put()
 	info, err := pc.Do("INFO")
 	//info, err := redis.String(pc.Do("INFO"))
 	if err != nil {
-	   return "", err
+		return "", err
 	}
 
 	return info, err
@@ -87,7 +65,6 @@ func (db *RedisDB) conn() (*pooledConn, error) {
 	c := r.(ResourceConn)
 	return &pooledConn{c, db.pool}, nil
 }
-
 
 // func (db *RedisDB) LoadUser(id int) (*User, error) {
 //	c, err := db.conn()
