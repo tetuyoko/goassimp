@@ -1,17 +1,27 @@
 package mgnredis
 
 import (
+	"time"
+
 	"github.com/garyburd/redigo/redis"
 	"github.com/youtube/vitess/go/pools"
 	"golang.org/x/net/context"
-	"time"
 )
+
+var RedisDb *RedisDB
+
+// ResourceConn adapts a Redigo connection to a Vitess Resource.
+type ResourceConn struct {
+	redis.Conn
+}
+
+func (r ResourceConn) Close() {
+	r.Conn.Close()
+}
 
 type RedisDB struct {
 	pool *pools.ResourcePool
 }
-
-var RedisDb *RedisDB
 
 type pooledConn struct {
 	ResourceConn
@@ -31,22 +41,18 @@ func InitRedis(server string, capacity int, maxcapacity int, duration time.Durat
 	RedisDb = newRedisDB(p)
 }
 
-func newRedisDB(pool *pools.ResourcePool) *RedisDB {
-	return &RedisDB{pool}
-}
-
 func (db *RedisDB) Ping() (interface{}, error) {
 	pc, err := db.conn()
 	if err != nil {
 		panic(err)
 	}
 	defer pc.Put()
-	info, err := pc.Do("INFO")
-	//info, err := redis.String(pc.Do("INFO"))
+
+	reply, err := pc.Do("INFO")
 	if err != nil {
 		panic(err)
 	}
-	return info, err
+	return reply, err
 }
 
 func (db *RedisDB) Set(key string, val string) (interface{}, error) {
@@ -75,6 +81,19 @@ func (db *RedisDB) Get(key string) (interface{}, error) {
 		panic(err)
 	}
 	return reply, err
+}
+
+// http://godoc.org/github.com/garyburd/redigo/redis#Pool
+func newPool(server string, capacity int, maxcapacity int, duration time.Duration) *pools.ResourcePool {
+	f := func() (pools.Resource, error) {
+		c, err := redis.Dial("tcp", server)
+		return ResourceConn{c}, err
+	}
+	return pools.NewResourcePool(f, capacity, maxcapacity, duration)
+}
+
+func newRedisDB(pool *pools.ResourcePool) *RedisDB {
+	return &RedisDB{pool}
 }
 
 func (db *RedisDB) conn() (*pooledConn, error) {

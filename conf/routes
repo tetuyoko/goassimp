@@ -8,10 +8,10 @@ GET     /                                       App.Index
 
 GET     /redis                                  Redis.Ping
 GET     /redis/ping.json                        Redis.Ping
-POST    /redis/set                         Redis.Set
+POST    /redis/set                              Redis.Set
 POST    /redis/set.json                         Redis.Set
 GET     /redis/get/:key                         Redis.Get
-GET     /redis/get/:key.json                       Redis.Get
+GET     /redis/get/:key.json                    Redis.Get
 
 GET     /unko                                   Unko.Index
 GET     /unko/list.json                         Unko.List
@@ -20,7 +20,7 @@ GET     /unko/show/:id.json                     Unko.Show
 POST    /unko/cancel/:id                        Unko.Cancel
 
 GET     /single/upload                         Single.Upload
-POST     /single/handle_upload                        Single.HandleUpload
+POST     /single/handle_upload                 Single.HandleUpload
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
