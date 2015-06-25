@@ -6,6 +6,7 @@ routes/
 *.o
 *.a
 *.so
+.idea
 
 # Folders
 _obj
