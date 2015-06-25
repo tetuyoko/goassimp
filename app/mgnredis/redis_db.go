@@ -25,8 +25,8 @@ func (db *RedisDB) Close() {
 	db.pool.Close()
 }
 
-func InitRedis() {
-	p := newPool(":6379")
+func InitRedis(server string) {
+	p := newPool(server)
 	RedisDb = newRedisDB(p)
 }
 

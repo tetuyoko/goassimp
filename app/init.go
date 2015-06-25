@@ -24,7 +24,10 @@ func init() {
 
 	// register startup functions with OnAppStart
 	// ( order dependent )
-	revel.OnAppStart(mgnredis.InitRedis)
+	revel.OnAppStart(func() {
+		host := revel.Config.StringDefault("redis.host", "")
+		mgnredis.InitRedis(host)
+	})
 }
 
 // TODO turn this into revel.HeaderFilter
