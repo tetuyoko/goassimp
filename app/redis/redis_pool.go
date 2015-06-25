@@ -33,6 +33,7 @@ func newPool(server string) *pools.ResourcePool {
 	return pools.NewResourcePool(f, capacity, RedisMaxCap, idleTimeout)
 }
 
+// load revel config
 func redisConnParams() (capacity int, maxCap int, idleTimeout time.Duration) {
 	capacity = RedisCapDefault
 	var err error

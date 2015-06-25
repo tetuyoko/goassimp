@@ -1,11 +1,10 @@
 package redis
 
 import (
-	"log"
-
 	//	"github.com/garyburd/redigo/redis"
 	"github.com/youtube/vitess/go/pools"
 	"golang.org/x/net/context"
+	"github.com/garyburd/redigo/redis"
 )
 
 type RedisDB struct {
@@ -19,12 +18,12 @@ type pooledConn struct {
 	pool *pools.ResourcePool
 }
 
-func (wc pooledConn) Close() {
+func (wc pooledConn) Put() {
 	wc.pool.Put(wc.ResourceConn)
 }
 
-func newRedisDB(pool *pools.ResourcePool) *RedisDB {
-	return &RedisDB{pool}
+func (db *RedisDB) Close() {
+	db.pool.Close()
 }
 
 func InitRedis() {
@@ -32,29 +31,26 @@ func InitRedis() {
 	defer p.Close()
 	redisDB = newRedisDB(p)
 	defer redisDB.Close()
-	myPing()
+	redisDB.Ping()
 }
 
-func myPing() {
-	//ctx := context.TODO()
-	//r, err := redisDB.pool.Get(ctx)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//defer redisDB.pool.Put(r)
+func newRedisDB(pool *pools.ResourcePool) *RedisDB {
+	return &RedisDB{pool}
+}
 
-	//c := r.(ResourceConn)
-
-	//pc := pooledConn{c, redisDB.pool}
-
-	pc, err := redisDB.conn()
+func (db *RedisDB) Ping() (string, error) {
+	pc, err := db.conn()
+	defer pc.Put()
 	if err != nil {
-		pc.Close()
-		log.Fatal(err)
+		return "", err
 	}
-	n, err := pc.Do("INFO")
-	log.Printf("info=%s", n)
-	pc.Close()
+	info, err :=  redis.String(pc.Do("INFO"))
+	//info, err := redis.String(pc.Do("INFO"))
+	if err != nil {
+	   return "", err
+	}
+
+	return info, err
 }
 
 func (db *RedisDB) conn() (*pooledConn, error) {
@@ -67,27 +63,8 @@ func (db *RedisDB) conn() (*pooledConn, error) {
 	return &pooledConn{c, db.pool}, nil
 }
 
-func (db *RedisDB) Close() {
-	db.pool.Close()
-}
 
-//func Ping( p pool) {
-//	ctx := context.TODO()
-//	r, err := p.Get(ctx)
-//	if err != nil {
-//		log.Fatal(err)
-//		//return nil, err
-//	}
-//	defer p.Put(r)
-//	c := r.(ResourceConn)
-//	n, err := c.Do("INFO")
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//	log.Printf("info=%s", n)
-//}
-
-//func (db *RedisDB) LoadUser(id int) (*User, error) {
+// func (db *RedisDB) LoadUser(id int) (*User, error) {
 //	c, err := db.conn()
 //	if err != nil {
 //		return nil, err
