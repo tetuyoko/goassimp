@@ -5,6 +5,7 @@ import (
 	"goassimp/app/redis"
 )
 
+
 func init() {
 	// Filters is the default set of global filters.
 	revel.Filters = []revel.Filter{
@@ -27,6 +28,8 @@ func init() {
 	revel.OnAppStart(redis.InitRedis)
 	// revel.OnAppStart(FillCache)
 }
+
+
 
 // TODO turn this into revel.HeaderFilter
 // should probably also have a filter for CSRF

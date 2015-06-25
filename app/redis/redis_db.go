@@ -1,10 +1,10 @@
 package redis
 
 import (
-	//	"github.com/garyburd/redigo/redis"
 	"github.com/youtube/vitess/go/pools"
 	"golang.org/x/net/context"
-	"github.com/garyburd/redigo/redis"
+//	"github.com/garyburd/redigo/redis"
+	"fmt"
 )
 
 type RedisDB struct {
@@ -31,20 +31,45 @@ func InitRedis() {
 	defer p.Close()
 	redisDB = newRedisDB(p)
 	defer redisDB.Close()
-	redisDB.Ping()
+	info, err := redisDB.Ping()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%s", info)
+
+	info, err = redisDB.Ping()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%s", info)
 }
 
 func newRedisDB(pool *pools.ResourcePool) *RedisDB {
 	return &RedisDB{pool}
 }
 
-func (db *RedisDB) Ping() (string, error) {
+func Huga() (interface{}, error) {
+	pc, err := redisDB.conn()
+	defer pc.Put()
+	if err != nil {
+		return "", err
+	}
+	info, err := pc.Do("INFO")
+	//info, err := redis.String(pc.Do("INFO"))
+	if err != nil {
+		return "", err
+	}
+
+	return info, err
+}
+
+func (db *RedisDB) Ping() (interface{}, error) {
 	pc, err := db.conn()
 	defer pc.Put()
 	if err != nil {
 		return "", err
 	}
-	info, err :=  redis.String(pc.Do("INFO"))
+	info, err := pc.Do("INFO")
 	//info, err := redis.String(pc.Do("INFO"))
 	if err != nil {
 	   return "", err

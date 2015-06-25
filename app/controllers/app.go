@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/revel/revel"
+	//"goassimp/app/redis"
 )
 
 type App struct {
@@ -10,7 +11,7 @@ type App struct {
 
 func (c App) Index() revel.Result {
 	//*revel.db.Ping()
-
+	//redis.Huga()
 	return c.Render()
 }
 
