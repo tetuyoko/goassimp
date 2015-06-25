@@ -4,5 +4,4 @@ github.com/agtorre/gocolorize v1.0.0
 gopkg.in/bsm/ratelimit.v1 bda20d5067a03094fc6762f7ead53027afac5f28
 gopkg.in/bufio.v1 v1
 github.com/revel/revel v0.12.0
-gopkg.in/redis.v3 v3.1.4
 gopkg.in/fsnotify.v1 v1.2.0

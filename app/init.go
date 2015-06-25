@@ -25,7 +25,6 @@ func init() {
 	// register startup functions with OnAppStart
 	// ( order dependent )
 	revel.OnAppStart(mgnredis.InitRedis)
-	// revel.OnAppStart(FillCache)
 }
 
 // TODO turn this into revel.HeaderFilter

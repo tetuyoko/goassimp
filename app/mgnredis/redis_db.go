@@ -1,9 +1,9 @@
 package mgnredis
 
 import (
+	"github.com/garyburd/redigo/redis"
 	"github.com/youtube/vitess/go/pools"
 	"golang.org/x/net/context"
-	"github.com/garyburd/redigo/redis"
 )
 
 type RedisDB struct {
@@ -85,28 +85,3 @@ func (db *RedisDB) conn() (*pooledConn, error) {
 	c := r.(ResourceConn)
 	return &pooledConn{c, db.pool}, nil
 }
-
-// func (db *RedisDB) LoadUser(id int) (*User, error) {
-//	c, err := db.conn()
-//	if err != nil {
-//		return nil, err
-//	}
-//	defer c.Close()
-//
-//	name, err := redis.String(c.Do("GET", UserKey(id)))
-//	if err != nil {
-//		return nil, err
-//	}
-//
-//	return &User{ID: id, Name: name}, nil
-//}
-//func (db *DB) SaveUser(u *User) error {
-//	c, err := db.conn()
-//	if err != nil {
-//		return err
-//	}
-//	defer c.Close()
-//
-//	_, err = c.Do("SET", u.Key(), u.Name)
-//	return err
-//}
