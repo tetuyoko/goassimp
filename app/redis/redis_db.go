@@ -3,17 +3,16 @@ package redis
 import (
 	"log"
 
-//	"github.com/garyburd/redigo/redis"
+	//	"github.com/garyburd/redigo/redis"
 	"github.com/youtube/vitess/go/pools"
 	"golang.org/x/net/context"
 )
-
 
 type RedisDB struct {
 	pool *pools.ResourcePool
 }
 
-var redisDB  RedisDB
+var redisDB *RedisDB
 
 type pooledConn struct {
 	*ResourceConn
@@ -24,21 +23,25 @@ func (wc *pooledConn) Close() {
 	wc.pool.Put(wc.ResourceConn)
 }
 
-
 func InitRedis() {
 	p := newPool(":6379")
 	defer p.Close()
-	redisDB := newRedisDB(p)
+	redisDB = newRedisDB(p)
+	defer redisDB.Close()
+	myPing()
 
+}
+
+func myPing() {
 	ctx := context.TODO()
-//	r, err := p.Get(ctx)
+	//r, err := p.Get(ctx)
 	r, err := redisDB.pool.Get(ctx)
 
 	if err != nil {
 		log.Fatal(err)
 		//return nil, err
 	}
-	defer p.Put(r)
+	defer redisDB.pool.Put(r)
 	c := r.(ResourceConn)
 	n, err := c.Do("INFO")
 	if err != nil {
