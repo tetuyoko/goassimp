@@ -34,12 +34,14 @@ func (t *ApplicationTest) TestThatRedisPingAPIWorks() {
 }
 
 func (t *ApplicationTest) TestThatRedisSetGetAPIWorks() {
-	t.PostForm("/redis/setkey", url.Values{
+	t.PostForm("/redis/set", url.Values{
 		"key":         {"hage"},
 		"val":         {"1"},
 	})
 
 	t.AssertOk()
+	t.AssertContains("hage")
+	t.AssertContains("1")
 	t.AssertContentType("application/json; charset=utf-8")
 }
 

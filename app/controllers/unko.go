@@ -1,14 +1,8 @@
 package controllers
 
 import (
-	//	"bytes"
 	"fmt"
-	//	"image"
-	//	_ "image/jpeg"
-	//	_ "image/png"
-	//	"encoding/json"
 	"github.com/revel/revel"
-	"goassimp/app"
 	"goassimp/app/models"
 	"goassimp/app/routes"
 
@@ -48,8 +42,7 @@ func (c *Unko) Index() revel.Result {
 		panic(err)
 	}
 	fmt.Printf("%s", info)
-	unko := app.HOGE
-	return c.Render(greeting, unko)
+	return c.Render(greeting, "unko")
 }
 
 //func (c *Single) HandleUpload(avatar []byte) revel.Result {

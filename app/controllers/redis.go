@@ -24,3 +24,11 @@ func (c *Redis) Ping() revel.Result {
         "Status":   "Success",
     })
 }
+
+func (c *Redis) Set() revel.Result {
+    return c.RenderJson(map[string]interface{}{
+        "key":    c.Params.Values["key"],
+        "val":    c.Params.Values["val"],
+        "Status":   "Success",
+    })
+}

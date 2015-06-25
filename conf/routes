@@ -8,6 +8,7 @@ GET     /                                       App.Index
 
 GET     /redis                                  Redis.Ping
 GET     /redis/ping.json                        Redis.Ping
+POST    /redis/set.json                        Redis.Set
 
 GET     /unko                                   Unko.Index
 GET     /unko/list.json                         Unko.List

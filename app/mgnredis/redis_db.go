@@ -1,7 +1,6 @@
 package mgnredis
 
 import (
-	"fmt"
 	"github.com/youtube/vitess/go/pools"
 	"golang.org/x/net/context"
 )
@@ -27,14 +26,7 @@ func (db *RedisDB) Close() {
 
 func InitRedis() {
 	p := newPool(":6379")
-	//defer p.Close()
 	RedisDb = newRedisDB(p)
-	//defer RedisDb.Close()
-	info, err := RedisDb.Ping()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("%s", info)
 }
 
 func newRedisDB(pool *pools.ResourcePool) *RedisDB {
