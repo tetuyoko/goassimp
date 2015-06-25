@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/revel/revel"
 	"goassimp/app/mgnredis"
+	"time"
 )
 
 func init() {
@@ -26,7 +27,14 @@ func init() {
 	// ( order dependent )
 	revel.OnAppStart(func() {
 		host := revel.Config.StringDefault("redis.host", "")
-		mgnredis.InitRedis(host)
+		capacity := revel.Config.IntDefault("redis.capacity_pool", 20)
+		maxcapacity := revel.Config.IntDefault("redis.max_capacity_pool", 200)
+		idleTimeout := revel.Config.StringDefault("redis.idleTimeout", "10m")
+		duration, err := time.ParseDuration(idleTimeout)
+		if err != nil {
+			panic(err)
+		}
+		mgnredis.InitRedis(host, capacity, maxcapacity, duration)
 	})
 }
 

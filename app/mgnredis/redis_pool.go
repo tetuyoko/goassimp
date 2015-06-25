@@ -1,8 +1,6 @@
 package mgnredis
 
 import (
-	"os"
-	"strconv"
 	"time"
 
 	"github.com/garyburd/redigo/redis"
@@ -18,33 +16,12 @@ func (r ResourceConn) Close() {
 	r.Conn.Close()
 }
 
-const (
-	RedisMaxCap     = 200
-	RedisCapDefault = 20
-)
-
 // http://godoc.org/github.com/garyburd/redigo/redis#Pool
-func newPool(server string) *pools.ResourcePool {
+func newPool(server string, capacity int, maxcapacity int, duration time.Duration) *pools.ResourcePool {
 	f := func() (pools.Resource, error) {
 		c, err := redis.Dial("tcp", server)
 		return ResourceConn{c}, err
 	}
-	capacity, RedisMaxCap, idleTimeout := redisConnParams()
-	return pools.NewResourcePool(f, capacity, RedisMaxCap, idleTimeout)
+	return pools.NewResourcePool(f, capacity, maxcapacity, duration)
 }
 
-// load revel config
-func redisConnParams() (capacity int, maxCap int, idleTimeout time.Duration) {
-	capacity = RedisCapDefault
-	var err error
-
-	capStr := os.Getenv("REDIS_CAPACITY")
-	if capStr != "" {
-		capacity, err = strconv.Atoi(capStr)
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	return capacity, RedisMaxCap, time.Minute
-}

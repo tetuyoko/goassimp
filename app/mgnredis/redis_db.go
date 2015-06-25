@@ -4,6 +4,7 @@ import (
 	"github.com/garyburd/redigo/redis"
 	"github.com/youtube/vitess/go/pools"
 	"golang.org/x/net/context"
+	"time"
 )
 
 type RedisDB struct {
@@ -25,8 +26,8 @@ func (db *RedisDB) Close() {
 	db.pool.Close()
 }
 
-func InitRedis(server string) {
-	p := newPool(server)
+func InitRedis(server string, capacity int, maxcapacity int, duration time.Duration) {
+	p := newPool(server, capacity, maxcapacity, duration)
 	RedisDb = newRedisDB(p)
 }
 
