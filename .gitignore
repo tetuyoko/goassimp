@@ -2,6 +2,9 @@ test-results/
 tmp/
 routes/
 
+dump.rdb
+stdout
+
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
 *.a

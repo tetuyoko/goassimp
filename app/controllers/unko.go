@@ -12,7 +12,7 @@ import (
 	"goassimp/app/models"
 	"goassimp/app/routes"
 
-	"goassimp/app/redis"
+	"goassimp/app/mgnredis"
 )
 
 type Unko struct {
@@ -43,7 +43,7 @@ func (c *Unko) Cancel(id int) revel.Result {
 
 func (c *Unko) Index() revel.Result {
 	greeting := "Super Mother Fucing Hage!!"
-	info, err := redis.RedisDb.Ping()
+	info, err := mgnredis.RedisDb.Ping()
 	if err != nil {
 		panic(err)
 	}

@@ -1,4 +1,4 @@
-package redis
+package mgnredis
 
 import (
 	"fmt"
@@ -42,6 +42,20 @@ func newRedisDB(pool *pools.ResourcePool) *RedisDB {
 }
 
 func (db *RedisDB) Ping() (interface{}, error) {
+	pc, err := db.conn()
+	if err != nil {
+		panic(err)
+	}
+	defer pc.Put()
+	info, err := pc.Do("INFO")
+	//info, err := redis.String(pc.Do("INFO"))
+	if err != nil {
+		panic(err)
+	}
+	return info, err
+}
+
+func (db *RedisDB) Get() (interface{}, error) {
 	pc, err := db.conn()
 	if err != nil {
 		panic(err)

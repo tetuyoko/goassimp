@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/revel/revel"
-	"goassimp/app/redis"
+	"goassimp/app/mgnredis"
 )
 
 var HOGE string
@@ -26,7 +26,7 @@ func init() {
 
 	// register startup functions with OnAppStart
 	// ( order dependent )
-	revel.OnAppStart(redis.InitRedis)
+	revel.OnAppStart(mgnredis.InitRedis)
 	revel.OnAppStart(InitStr)
 	// revel.OnAppStart(FillCache)
 }
