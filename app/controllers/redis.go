@@ -26,9 +26,22 @@ func (c *Redis) Ping() revel.Result {
 }
 
 func (c *Redis) Set() revel.Result {
+    info, err := mgnredis.RedisDb.Set(c.Params.Values["key"][0], c.Params.Values["val"][0])
+    if err != nil {
+        panic(err)
+    }
+    str := fmt.Sprintf("%s", info)
+
     return c.RenderJson(map[string]interface{}{
-        "key":    c.Params.Values["key"],
-        "val":    c.Params.Values["val"],
+        "reply":    str,
+        "Status":   "Success",
+    })
+}
+
+func (c *Redis) Get(key string) revel.Result {
+    return c.RenderJson(map[string]interface{}{
+        "key":    key,
+        "val":    "val",
         "Status":   "Success",
     })
 }

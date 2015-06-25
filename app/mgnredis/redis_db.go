@@ -3,6 +3,7 @@ package mgnredis
 import (
 	"github.com/youtube/vitess/go/pools"
 	"golang.org/x/net/context"
+	"github.com/garyburd/redigo/redis"
 )
 
 type RedisDB struct {
@@ -47,18 +48,32 @@ func (db *RedisDB) Ping() (interface{}, error) {
 	return info, err
 }
 
-func (db *RedisDB) Get() (interface{}, error) {
+func (db *RedisDB) Set(key string, val string) (interface{}, error) {
 	pc, err := db.conn()
 	if err != nil {
 		panic(err)
 	}
 	defer pc.Put()
-	info, err := pc.Do("INFO")
-	//info, err := redis.String(pc.Do("INFO"))
+
+	reply, err := pc.Do("SET", key, val)
 	if err != nil {
 		panic(err)
 	}
-	return info, err
+	return reply, err
+}
+
+func (db *RedisDB) Get(key string) (interface{}, error) {
+	pc, err := db.conn()
+	if err != nil {
+		panic(err)
+	}
+	defer pc.Put()
+
+	reply, err := redis.String(pc.Do("GET", key))
+	if err != nil {
+		panic(err)
+	}
+	return reply, err
 }
 
 func (db *RedisDB) conn() (*pooledConn, error) {

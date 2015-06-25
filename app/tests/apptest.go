@@ -45,6 +45,14 @@ func (t *ApplicationTest) TestThatRedisSetGetAPIWorks() {
 	t.AssertContentType("application/json; charset=utf-8")
 }
 
+func (t *ApplicationTest) TestThatRedisGetAPIWorks() {
+	t.Get("/redis/get/key.json")
+
+	t.AssertOk()
+	t.AssertContains("key")
+	t.AssertContentType("application/json; charset=utf-8")
+}
+
 func (t *ApplicationTest) After() {
 	println("Tear down")
 }
