@@ -34,14 +34,19 @@ func (c *Redis) Set() revel.Result {
 
     return c.RenderJson(map[string]interface{}{
         "reply":    str,
-        "Status":   "Success",
     })
 }
 
 func (c *Redis) Get(key string) revel.Result {
+    info, err := mgnredis.RedisDb.Get(key)
+    if err != nil {
+        panic(err)
+    }
+
+    str := fmt.Sprintf("%s", info)
     return c.RenderJson(map[string]interface{}{
         "key":    key,
-        "val":    "val",
+        "val":    str,
         "Status":   "Success",
     })
 }

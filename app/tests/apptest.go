@@ -40,16 +40,13 @@ func (t *ApplicationTest) TestThatRedisSetGetAPIWorks() {
 	})
 
 	t.AssertOk()
-	t.AssertContains("hage")
-	t.AssertContains("1")
+	t.AssertContains("OK")
 	t.AssertContentType("application/json; charset=utf-8")
-}
 
-func (t *ApplicationTest) TestThatRedisGetAPIWorks() {
-	t.Get("/redis/get/key.json")
+	t.Get("/redis/get/hage")
 
 	t.AssertOk()
-	t.AssertContains("key")
+	t.AssertContains("1")
 	t.AssertContentType("application/json; charset=utf-8")
 }
 
