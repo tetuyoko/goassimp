@@ -15,12 +15,16 @@ type RedisDB struct {
 var redisDB *RedisDB
 
 type pooledConn struct {
-	*ResourceConn
+	ResourceConn
 	pool *pools.ResourcePool
 }
 
-func (wc *pooledConn) Close() {
+func (wc pooledConn) Close() {
 	wc.pool.Put(wc.ResourceConn)
+}
+
+func newRedisDB(pool *pools.ResourcePool) *RedisDB {
+	return &RedisDB{pool}
 }
 
 func InitRedis() {
@@ -29,29 +33,28 @@ func InitRedis() {
 	redisDB = newRedisDB(p)
 	defer redisDB.Close()
 	myPing()
-
 }
 
 func myPing() {
-	ctx := context.TODO()
-	//r, err := p.Get(ctx)
-	r, err := redisDB.pool.Get(ctx)
+	//ctx := context.TODO()
+	//r, err := redisDB.pool.Get(ctx)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//defer redisDB.pool.Put(r)
 
+	//c := r.(ResourceConn)
+
+	//pc := pooledConn{c, redisDB.pool}
+
+	pc, err := redisDB.conn()
 	if err != nil {
-		log.Fatal(err)
-		//return nil, err
-	}
-	defer redisDB.pool.Put(r)
-	c := r.(ResourceConn)
-	n, err := c.Do("INFO")
-	if err != nil {
+		pc.Close()
 		log.Fatal(err)
 	}
+	n, err := pc.Do("INFO")
 	log.Printf("info=%s", n)
-}
-
-func newRedisDB(pool *pools.ResourcePool) *RedisDB {
-	return &RedisDB{pool}
+	pc.Close()
 }
 
 func (db *RedisDB) conn() (*pooledConn, error) {
@@ -60,7 +63,7 @@ func (db *RedisDB) conn() (*pooledConn, error) {
 	if err != nil {
 		return nil, err
 	}
-	c := r.(*ResourceConn)
+	c := r.(ResourceConn)
 	return &pooledConn{c, db.pool}, nil
 }
 
