@@ -15,7 +15,7 @@ type Redis struct {
 func (c *Redis) Ping() revel.Result {
     info, err := mgnredis.RedisDb.Ping()
     if err != nil {
-        panic(err
+        panic(err)
     }
     str := fmt.Sprintf("%s", info)
 
