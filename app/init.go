@@ -28,13 +28,13 @@ func init() {
 	revel.OnAppStart(func() {
 		host := revel.Config.StringDefault("redis.host", ":6379")
 		capacity := revel.Config.IntDefault("redis.capacity_pool", 20)
-		maxcapacity := revel.Config.IntDefault("redis.max_capacity_pool", 200)
-		idleTimeout := revel.Config.StringDefault("redis.idleTimeout", "10m")
-		duration, err := time.ParseDuration(idleTimeout)
+		max_capacity := revel.Config.IntDefault("redis.max_capacity_pool", 200)
+		dstr := revel.Config.StringDefault("redis.idleTimeout", "1m")
+		duration, err := time.ParseDuration(dstr)
 		if err != nil {
 			panic(err)
 		}
-		mgnredis.InitRedis(host, capacity, maxcapacity, duration)
+		mgnredis.InitRedis(host, capacity, max_capacity, duration)
 	})
 }
 
