@@ -19,6 +19,17 @@
 
    Run with <tt>--help</tt> for options.
 
+### Deployコマンド
+   ~~~sh
+   (local)% GOOS=linux GOARCH=amd64 revel package $myapp
+   (local)% scp $myapp server:target
+   (local)% ssh server
+   (server)% cd target
+   (server)% tar xzvf myapp.tar.gz
+   (server)% bash run.sh
+   ~~~
+
+
 ### Go to http://localhost:9000/ and you'll see:
 
 "It works"
