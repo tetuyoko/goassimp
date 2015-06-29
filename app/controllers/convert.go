@@ -7,6 +7,8 @@ import (
 	//"goassimp/app/routes"
 	"io"
 	"os"
+	"goassimp/app/mgnredis"
+	"github.com/satori/go.uuid"
 )
 
 type Convert struct {
@@ -25,7 +27,8 @@ func (c *Convert) Convert(source[]byte) revel.Result {
 	// 画像保存
 	dstDir := "public/tmp"
 	dstName := c.Params.Files["source"][0].Filename
-	dst, err := os.Create(dstDir + "/" + dstName)
+	pth := dstDir + "/" + dstName
+	dst, err := os.Create(pth)
 	if err != nil {
 		panic(err)
 	}
@@ -39,11 +42,26 @@ func (c *Convert) Convert(source[]byte) revel.Result {
 	// 情報登録
 	// uuid, path, created_at
 	// Zset順
+	uuid := get8UUID()
 
+	_, err = mgnredis.RedisDb.HSet( uuid, "path", pth)
+	if err != nil {
+		panic(err)
+	}
+	_, err = mgnredis.RedisDb.HSet( uuid, "created_at", pth)
+	if err != nil {
+		panic(err)
+	}
 
 	fmt.Println("Status: Successfully uploaded")
 
 	return c.RenderJson(map[string]interface{}{
 		"Status": "Successfully uploaded",
 	})
+}
+
+func get8UUID() (string) {
+	u1 := uuid.NewV4()
+	str := fmt.Sprintf("%s", u1)
+	return str[0:8]
 }
