@@ -9,6 +9,7 @@ import (
 	"os"
 	"goassimp/app/mgnredis"
 	"github.com/satori/go.uuid"
+	"time"
 )
 
 type Convert struct {
@@ -39,16 +40,22 @@ func (c *Convert) Convert(source[]byte) revel.Result {
 		panic(err)
 	}
 
+	// TODO: おとなしくDBにしよ。。
 	// 情報登録
 	// uuid, path, created_at
 	// Zset順
-	uuid := get8UUID()
+    _, err = mgnredis.RedisDb.HSet( uuid, "uuid",  get8UUID())
+    if err != nil {
+      panic(err)
+    }
 
 	_, err = mgnredis.RedisDb.HSet( uuid, "path", pth)
 	if err != nil {
 		panic(err)
 	}
-	_, err = mgnredis.RedisDb.HSet( uuid, "created_at", pth)
+	t := time.Now()
+	str := fmt.Sprintf("%s", t.Unix())
+	_, err = mgnredis.RedisDb.HSet( uuid, "created_at", str)
 	if err != nil {
 		panic(err)
 	}
