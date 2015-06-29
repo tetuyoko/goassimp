@@ -13,7 +13,14 @@ POST    /redis/set.json                         Redis.Set
 GET     /redis/get/:key                         Redis.Get
 GET     /redis/get/:key.json                    Redis.Get
 
+GET     /redis/hget/:key                         Redis.Hget
+GET     /redis/hget/:key.json                    Redis.Hget
+
+POST    /redis/hset                              Redis.Hset
+POST    /redis/hset.json                         Redis.Hset
+
 GET     /unko                                   Unko.Index
+
 GET     /unko/list.json                         Unko.List
 GET     /unko/show/:id                          Unko.Show
 GET     /unko/show/:id.json                     Unko.Show

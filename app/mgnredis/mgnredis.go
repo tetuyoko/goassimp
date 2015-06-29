@@ -69,6 +69,34 @@ func (db *RedisDB) Set(key string, val string) (interface{}, error) {
 	return reply, err
 }
 
+func (db *RedisDB) HSet(key string, field string, val string) (interface{}, error) {
+	pc, err := db.conn()
+	if err != nil {
+		panic(err)
+	}
+	defer pc.Put()
+
+	reply, err := pc.Do("HSET", key, field, val)
+	if err != nil {
+		panic(err)
+	}
+	return reply, err
+}
+
+func (db *RedisDB) HGetAll(key string) (interface{}, error) {
+	pc, err := db.conn()
+	if err != nil {
+		panic(err)
+	}
+	defer pc.Put()
+
+	reply, err := redis.Strings( pc.Do("HGETALL", key))
+	if err != nil {
+		panic(err)
+	}
+	return reply, err
+}
+
 func (db *RedisDB) Get(key string) (interface{}, error) {
 	pc, err := db.conn()
 	if err != nil {
