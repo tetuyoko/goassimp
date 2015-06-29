@@ -19,12 +19,12 @@ GET     /redis/hget/:key.json                    Redis.Hget
 POST    /redis/hset                              Redis.Hset
 POST    /redis/hset.json                         Redis.Hset
 
-GET     /unko                                   Unko.Index
+GET     /sand                                   Sand.Index
 
-GET     /unko/list.json                         Unko.List
-GET     /unko/show/:id                          Unko.Show
-GET     /unko/show/:id.json                     Unko.Show
-POST    /unko/cancel/:id                        Unko.Cancel
+GET     /sand/list.json                         Sand.List
+GET     /sand/show/:id                          Sand.Show
+GET     /sand/show/:id.json                     Sand.Show
+POST    /sand/cancel/:id                        Sand.Cancel
 
 GET     /single/upload                         Single.Upload
 POST     /single/handle_upload                 Single.HandleUpload
