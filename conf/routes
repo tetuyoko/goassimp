@@ -7,23 +7,17 @@ module:testrunner
 GET     /                                       App.Index
 
 GET     /redis                                  Redis.Ping
-GET     /redis/ping.json                        Redis.Ping
 POST    /redis/set                              Redis.Set
-POST    /redis/set.json                         Redis.Set
 GET     /redis/get/:key                         Redis.Get
-GET     /redis/get/:key.json                    Redis.Get
 
 GET     /redis/hget/:key                         Redis.Hget
-GET     /redis/hget/:key.json                    Redis.Hget
 
 POST    /redis/hset                              Redis.Hset
-POST    /redis/hset.json                         Redis.Hset
 
 GET     /sand                                   Sand.Index
 
 GET     /sand/list.json                         Sand.List
 GET     /sand/show/:id                          Sand.Show
-GET     /sand/show/:id.json                     Sand.Show
 POST    /sand/cancel/:id                        Sand.Cancel
 
 GET      /list                                  Convert.List
