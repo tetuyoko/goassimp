@@ -26,8 +26,8 @@ GET     /sand/show/:id                          Sand.Show
 GET     /sand/show/:id.json                     Sand.Show
 POST    /sand/cancel/:id                        Sand.Cancel
 
-GET     /single/upload                         Single.Upload
-POST     /single/handle_upload                 Single.HandleUpload
+GET      /list                                  Convert.List
+POST     /convert                               Convert.Convert
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
