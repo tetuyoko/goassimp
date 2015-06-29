@@ -15,6 +15,7 @@ GET     /redis/hget/:key                         Redis.Hget
 POST    /redis/hset                              Redis.Hset
 
 GET     /sand                                   Sand.Index
+GET     /dm                                     DB.Index
 
 GET     /sand/list.json                         Sand.List
 GET     /sand/show/:id                          Sand.Show

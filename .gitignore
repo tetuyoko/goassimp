@@ -11,6 +11,8 @@ stdout
 *.so
 .idea
 
+*.db
+
 # Folders
 _obj
 _test

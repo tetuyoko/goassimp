@@ -24,7 +24,6 @@ func init() {
 	}
 
 	// register startup functions with OnAppStart
-	// ( order dependent )
 	revel.OnAppStart(func() {
 		host := revel.Config.StringDefault("redis.host", ":6379")
 		capacity := revel.Config.IntDefault("redis.capacity_pool", 20)

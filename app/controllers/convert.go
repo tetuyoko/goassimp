@@ -44,10 +44,7 @@ func (c *Convert) Convert(source[]byte) revel.Result {
 	// 情報登録
 	// uuid, path, created_at
 	// Zset順
-    _, err = mgnredis.RedisDb.HSet( uuid, "uuid",  get8UUID())
-    if err != nil {
-      panic(err)
-    }
+	uuid := get8UUID()
 
 	_, err = mgnredis.RedisDb.HSet( uuid, "path", pth)
 	if err != nil {

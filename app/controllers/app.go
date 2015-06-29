@@ -9,6 +9,5 @@ type App struct {
 }
 
 func (c App) Index() revel.Result {
-	fmt.Printf
 	return c.Render()
 }
