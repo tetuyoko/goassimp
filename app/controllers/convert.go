@@ -7,7 +7,7 @@ import (
 	//"goassimp/app/routes"
 	"io"
 	"os"
-	"goassimp/app/mgnredis"
+	"goassimp/app/lib/mgnredis"
 	"github.com/satori/go.uuid"
 	"time"
 )

@@ -2,9 +2,10 @@ package app
 
 import (
 	"github.com/revel/revel"
-	"goassimp/app/mgnredis"
 	"time"
-	"goassimp/app/lib"
+
+	"goassimp/app/lib/mgnredis"
+	"goassimp/app/lib/mgndb"
 )
 
 func init() {
@@ -26,6 +27,7 @@ func init() {
 
 	// register startup functions with OnAppStart
 	revel.OnAppStart(mugendb.InitDB) // DBやテーブルの作成
+
 	revel.OnAppStart(func() {
 		host := revel.Config.StringDefault("redis.host", ":6379")
 		capacity := revel.Config.IntDefault("redis.capacity_pool", 20)

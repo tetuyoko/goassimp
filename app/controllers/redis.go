@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/revel/revel"
-	"goassimp/app/mgnredis"
+	"goassimp/app/lib/mgnredis"
 )
 
 type Redis struct {
