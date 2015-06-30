@@ -35,9 +35,10 @@ func InitDB(user string, password string, host string, dbname string) {
 	Db.DB().SetMaxIdleConns(10)
 	Db.DB().SetMaxOpenConns(100)
 	// migration
+	// 1番目の引数のテーブルができていると、以下のテーブルがスキップされるので注意する(別の行にする)
 	Db.AutoMigrate(&models.User{}, &models.ConvertLog{})
-	insertUser()
-	insertConvertLog()
+	//insertUser()
+	//insertConvertLog()
 }
 
 func checkErr(err error, msg string) {
