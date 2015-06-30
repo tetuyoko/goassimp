@@ -5,6 +5,7 @@ import (
     _ "github.com/go-sql-driver/mysql"
     "log"
     "fmt"
+    "goassimp/app/models"
 )
 
 var (
@@ -26,13 +27,18 @@ func InitDB() {
     Db, err = gorm.Open("mysql", "root:@/godb?charset=utf8&parseTime=True&loc=Local")
     checkErr(err, "mysql Connect failed.")
 
-    Db.DB().Ping()
+    // Db.DB().Ping()
     Db.DB().SetMaxIdleConns(10)
     Db.DB().SetMaxOpenConns(100)
-    Db.SingularTable(true)
 
-     // migration
-     // db.CreateTable(&User{})
+    // migration
+    Db.AutoMigrate(&models.User{})
+
+    // get
+    //Db.Create(&models.User{Name: "Jinzhu"})
+    //user := models.User{}
+    //Db.First(&user)
+    //log.Fatalln(user.Name, nil)
 }
 
 func checkErr(err error, msg string) {
