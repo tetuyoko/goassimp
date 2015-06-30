@@ -18,10 +18,17 @@ type Convert struct {
 }
 
 func (c *Convert) List() revel.Result {
-	var id string = c.Params.Get("id")
-	fmt.Println(id)
+	//var id string = c.Params.Get("id")
+	//fmt.Println(id)
 	// 情報出力
 	// Zset順
+//	convert_logs := []models.ConvertLog{}
+	if err := mugendb.Db.Model(&models.ConvertLog{}).Order("created_at desc").Limit(10).Error; err != nil {
+		panic(err)
+	}
+
+
+	//return c.Render(convert_logs)
 	return c.Render()
 }
 
@@ -42,7 +49,7 @@ func (c *Convert) Convert(source []byte) revel.Result {
 	}
 
 	// ログ保存
-	con := models.ConvertLog{UUID: get8UUID(), Path: pth}
+	con := models.ConvertLog{UUID: get8UUID(), Url: pth}
 	status := "Status: Successfully uploaded"
 
 	if err := mugendb.Db.Save(&con).Error; err != nil {
@@ -50,9 +57,24 @@ func (c *Convert) Convert(source []byte) revel.Result {
 		status = "failed err" + errs
 	}
 
-	return c.RenderJson(map[string]interface{}{
-		"Status": status,
-	})
+	//return c.RenderJson(map[string]interface{}{
+	//	"Status": status,
+	//})
+	fmt.Println(status)
+
+	//buf := bytes.NewBuffer([]byte(`{
+	//	"test": {
+	//		"array": [1, "2", 3],
+	//		"arraywithsubs": [
+	//			{"subkeyone": 1},
+	//			{"subkeytwo": 2, "subkeythree": 3}
+	//		],
+	//		"bignum": 8000000000
+	//	}
+	//}`))
+	//js, err := NewFromReader(buf)
+
+	return c.RenderJson(con)
 }
 
 func get8UUID() string {
@@ -60,5 +82,3 @@ func get8UUID() string {
 	str := fmt.Sprintf("%s", u1)
 	return str[0:8]
 }
-
-

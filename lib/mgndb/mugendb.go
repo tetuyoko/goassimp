@@ -36,7 +36,8 @@ func InitDB(user string, password string, host string, dbname string) {
 	Db.DB().SetMaxOpenConns(100)
 	// migration
 	// 1番目の引数のテーブルができていると、以下のテーブルがスキップされるので注意する(別の行にする)
-	Db.AutoMigrate(&models.User{}, &models.ConvertLog{})
+	Db.AutoMigrate(&models.User{})
+	Db.AutoMigrate(&models.ConvertLog{})
 	//insertUser()
 	//insertConvertLog()
 }
@@ -55,9 +56,9 @@ func insertUser() {
 }
 
 func insertConvertLog() {
-	Db.Create(&models.ConvertLog{UUID: "Jingia", Path: "path/to/tmp"})
+	Db.Create(&models.ConvertLog{UUID: "Jingia", Url: "path/to/tmp"})
 	c := models.ConvertLog{}
 	Db.First(&c)
 	log.Println(c.UUID, nil)
-	log.Println(c.Path, nil)
+	log.Println(c.Url, nil)
 }
