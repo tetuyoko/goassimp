@@ -3,9 +3,10 @@ package controllers
 import (
     "database/sql"
     "github.com/coopernurse/gorp"
-    _ "github.com/mattn/go-sqlite3"
+    _ "github.com/go-sql-driver/mysql"
     r "github.com/revel/revel"
     "goassimp/app/models" // revel new APP_NAME の APP_NAME
+    "log"
 )
 
 var (
@@ -13,17 +14,31 @@ var (
 )
 
 func InitDB() {
-    db, err := sql.Open("sqlite3", "./app.db")
-    if err != nil {
-        panic(err.Error())
-    }
-    DbMap = &gorp.DbMap{Db: db, Dialect: gorp.SqliteDialect{}}
+    // connect mysql
+    db, err := sql.Open("mysql", "root:@/")
+    checkErr(err, "sql.Open failed")
+    DbMap := &gorp.DbMap{Db: db, Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"}}
+
+    // create db if not exists
+    _, err = DbMap.Exec("CREATE DATABASE IF NOT EXISTS godb DEFAULT CHARACTER SET utf8;")
+    checkErr(err, "create db failed")
+
+    // connect db
+    db, err = sql.Open("mysql", "root:@/godb")
+    checkErr(err, "sql.Open Failed.")
+    DbMap = &gorp.DbMap{Db: db, Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"}}
 
     // ここで好きにテーブルを定義する
-    t := DbMap.AddTable(models.User{}).SetKeys(true, "Id")
-    t.ColMap("Name").MaxSize = 20
+    // add table
+     DbMap.AddTableWithName(models.User{}, "users").SetKeys(true, "Id")
 
     DbMap.CreateTables()
+}
+
+func checkErr(err error, msg string) {
+    if err != nil {
+        log.Fatalln(msg, err)
+    }
 }
 
 type GorpController struct {
@@ -33,9 +48,7 @@ type GorpController struct {
 
 func (c *GorpController) Begin() r.Result {
     txn, err := DbMap.Begin()
-    if err != nil {
-        panic(err)
-    }
+    checkErr(err, "DbMap.Begin() failed")
     c.Txn = txn
     return nil
 }
