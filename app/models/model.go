@@ -2,9 +2,8 @@ package models
 
 import "time"
 
-type User struct {
-    Id   int
-    Name string
+type Model struct {
+    ID           uint `gorm:"primary_key"`
     CreatedAt    time.Time
     UpdatedAt    time.Time
 }
