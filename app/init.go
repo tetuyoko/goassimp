@@ -27,6 +27,10 @@ func init() {
 
 	// register startup functions with OnAppStart
 	revel.OnAppStart(func() {
+		user := "root"
+		password := ""
+		host := "unix(/tmp/mysql.sock)"
+		dbname := "godb"
 		mugendb.InitDB(user, password, host, dbname)
 	}) // DBやテーブルの作成
 
