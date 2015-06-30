@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"github.com/revel/revel"
 	//"goassimp/app/routes"
+	"github.com/satori/go.uuid"
+	"goassimp/lib/mgnredis"
 	"io"
 	"os"
-	"github.com/satori/go.uuid"
 	"time"
-	"goassimp/lib/mgnredis"
 )
 
 type Convert struct {
@@ -24,7 +24,7 @@ func (c *Convert) List() revel.Result {
 	return c.Render()
 }
 
-func (c *Convert) Convert(source[]byte) revel.Result {
+func (c *Convert) Convert(source []byte) revel.Result {
 	// 画像保存
 	dstDir := "public/tmp"
 	dstName := c.Params.Files["source"][0].Filename
@@ -46,13 +46,13 @@ func (c *Convert) Convert(source[]byte) revel.Result {
 	// Zset順
 	uuid := get8UUID()
 
-	_, err = mgnredis.RedisDb.HSet( uuid, "path", pth)
+	_, err = mgnredis.RedisDb.HSet(uuid, "path", pth)
 	if err != nil {
 		panic(err)
 	}
 	t := time.Now()
 	str := fmt.Sprintf("%s", t.Unix())
-	_, err = mgnredis.RedisDb.HSet( uuid, "created_at", str)
+	_, err = mgnredis.RedisDb.HSet(uuid, "created_at", str)
 	if err != nil {
 		panic(err)
 	}
@@ -64,7 +64,7 @@ func (c *Convert) Convert(source[]byte) revel.Result {
 	})
 }
 
-func get8UUID() (string) {
+func get8UUID() string {
 	u1 := uuid.NewV4()
 	str := fmt.Sprintf("%s", u1)
 	return str[0:8]

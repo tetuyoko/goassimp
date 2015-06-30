@@ -60,9 +60,9 @@ func (c *Redis) Hget(key string) revel.Result {
 
 	//str := fmt.Sprintf("%s", info)
 	return c.RenderJson(map[string]interface{}{
-		"key":    key,
-		"field_values":    info,
-		"Status": "Success",
+		"key":          key,
+		"field_values": info,
+		"Status":       "Success",
 	})
 }
 

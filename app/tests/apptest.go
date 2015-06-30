@@ -20,10 +20,10 @@ func (t *ApplicationTest) TestThatIndexPageWorks() {
 }
 
 func (t *ApplicationTest) TestThatRedisAPIWorks() {
-    t.Get("/redis")
-    t.AssertOk()
+	t.Get("/redis")
+	t.AssertOk()
 	t.AssertContains("Success")
-    t.AssertContentType("application/json; charset=utf-8")
+	t.AssertContentType("application/json; charset=utf-8")
 }
 
 func (t *ApplicationTest) TestThatRedisPingAPIWorks() {
@@ -35,8 +35,8 @@ func (t *ApplicationTest) TestThatRedisPingAPIWorks() {
 
 func (t *ApplicationTest) TestThatRedisSetGetAPIWorks() {
 	t.PostForm("/redis/set", url.Values{
-		"key":         {"hage"},
-		"val":         {"1"},
+		"key": {"hage"},
+		"val": {"1"},
 	})
 	t.AssertOk()
 	t.AssertContains("OK")
@@ -51,9 +51,9 @@ func (t *ApplicationTest) TestThatRedisSetGetAPIWorks() {
 
 func (t *ApplicationTest) TestThatRedisHSetHGetAPIWorks() {
 	t.PostForm("/redis/hset", url.Values{
-		"key":         {"hsetkey"},
-		"field":         {"hsetfield"},
-		"val":         {"1"},
+		"key":   {"hsetkey"},
+		"field": {"hsetfield"},
+		"val":   {"1"},
 	})
 	t.AssertOk()
 	t.AssertContentType("application/json; charset=utf-8")
@@ -65,7 +65,6 @@ func (t *ApplicationTest) TestThatRedisHSetHGetAPIWorks() {
 	t.AssertContains("1")
 	t.AssertContentType("application/json; charset=utf-8")
 }
-
 
 func (t *ApplicationTest) After() {
 	println("Tear down")

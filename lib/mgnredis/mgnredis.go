@@ -90,7 +90,7 @@ func (db *RedisDB) HGetAll(key string) (interface{}, error) {
 	}
 	defer pc.Put()
 
-	reply, err := redis.Strings( pc.Do("HGETALL", key))
+	reply, err := redis.Strings(pc.Do("HGETALL", key))
 	if err != nil {
 		panic(err)
 	}

@@ -1,6 +1,6 @@
 package models
 
 type User struct {
-    Template
-    Name string
+	Template
+	Name string
 }
