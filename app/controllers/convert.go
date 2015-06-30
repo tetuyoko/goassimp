@@ -3,13 +3,14 @@ package controllers
 import (
 	"bytes"
 	"fmt"
-	"github.com/revel/revel"
-	//"goassimp/app/routes"
-	"github.com/satori/go.uuid"
-	"goassimp/lib/mgnredis"
 	"io"
 	"os"
-	"time"
+
+	"github.com/revel/revel"
+	"goassimp/lib/mgndb"
+	"goassimp/app/models"
+
+	"github.com/satori/go.uuid"
 )
 
 type Convert struct {
@@ -40,29 +41,17 @@ func (c *Convert) Convert(source []byte) revel.Result {
 		panic(err)
 	}
 
-	// TODO: おとなしくDBにしよ。。
-	// 情報登録
-	// uuid, path, created_at
-	// Zset順
-	uuid := get8UUID()
+	// ログ保存
+	con := models.ConvertLog{UUID: get8UUID(), Path: pth}
+	status := "Status: Successfully uploaded"
 
-	_, err = mgnredis.RedisDb.HSet(uuid, "path", pth)
-	if err != nil {
-		panic(err)
+	if err := mugendb.Db.Save(&con).Error; err != nil {
+		errs := fmt.Sprintf("%s", err)
+		status = "failed err" + errs
 	}
-	t := time.Now()
-
-	str := fmt.Sprintf("%s", t.Unix())
-
-	_, err = mgnredis.RedisDb.HSet(uuid, "created_at", str)
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println("Status: Successfully uploaded")
 
 	return c.RenderJson(map[string]interface{}{
-		"Status": "Successfully uploaded",
+		"Status": status,
 	})
 }
 
@@ -71,3 +60,5 @@ func get8UUID() string {
 	str := fmt.Sprintf("%s", u1)
 	return str[0:8]
 }
+
+
