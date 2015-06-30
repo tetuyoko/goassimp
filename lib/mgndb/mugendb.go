@@ -54,7 +54,7 @@ func insertUser() {
 }
 
 func insertConvertLog() {
-	Db.Create(&models.ConvertLog{UUID: "Jinzhu", Path: "path/to/tmp"})
+	Db.Create(&models.ConvertLog{UUID: "Jingia", Path: "path/to/tmp"})
 	c := models.ConvertLog{}
 	Db.First(&c)
 	log.Println(c.UUID, nil)
