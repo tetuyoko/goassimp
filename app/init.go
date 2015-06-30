@@ -26,7 +26,9 @@ func init() {
 	}
 
 	// register startup functions with OnAppStart
-	revel.OnAppStart(mugendb.InitDB) // DBやテーブルの作成
+	revel.OnAppStart(func() {
+		mugendb.InitDB(user, password, host, dbname)
+	}) // DBやテーブルの作成
 
 	revel.OnAppStart(func() {
 		host := revel.Config.StringDefault("redis.host", ":6379")
