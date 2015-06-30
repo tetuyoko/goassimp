@@ -15,3 +15,14 @@
     {{end}}
   </head>
   <body>
+
+  {{if .flash.error}}
+  <p class="fError">
+    <strong>{{.flash.error}}</strong>
+  </p>
+  {{end}}
+  {{if .flash.success}}
+  <p class="fSuccess">
+    <strong>{{.flash.success}}</strong>
+  </p>
+  {{end}}

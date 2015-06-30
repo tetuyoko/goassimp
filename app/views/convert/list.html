@@ -1,18 +1,51 @@
 {{set . "title" "Upload Single File"}}
 {{template "header.html" .}}
 
+
+<script type="text/javascript">
+function upload(form) {
+    $form = $('#upload-form');
+    fd = new FormData($form[0]);
+    $.ajax(
+        '/convert',
+        {
+        type: 'post',
+        processData: false,
+        contentType: false,
+        data: fd,
+       // dataType: "json",
+        success: function(data) {
+            console.log(data);
+            $("#table").prepend("<tr><td><img src="
+		  	 + data.url +" width='200'></td><td>"
+		  	 + data.id +" </td><td>"
+		  	 + data.uuid +"</td>"
+		  	 + data.url +"</td><td></tr> "
+            )
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            consoloe.log( "ERROR" );
+            consoloe.log( textStatus );
+            consoloe.log( errorThrown );
+        }
+    });
+    return false;
+}
+</script>
+
 <div class="container">
 	<h1>Current Uploads</h1>
+	<p>
+		curl -F source=@1.png  http://localhost:9000/convert
+	</p>
 
 	<div class="row">
 		<div class="span6">
-			<form method="post" action="{{url "Convert.Convert"}}" enctype="multipart/form-data">
-			<p>
-				<label for="source"><strong>Source*:</strong></label>
-				<input type="file" name="source" id="avatar" class="span6">
-			</p>
-			<hr>
-			<input type="submit" value="Upload" class="btn btn-large btn-success">
+			<form id="upload-form" method="post" enctype="multipart/form-data" onSubmit="return upload(this);">
+				<input id="upload-form-file" name="userfile" size="27" type="file" accept="image/*;capture=camera"/>
+				<br />
+				<br />
+				<input type="submit" name="submit" value="Upload" class="btn btn-large btn-success"/>
 			</form>
 		</div>
 	</div>
@@ -29,25 +62,20 @@
 			<th>ID</th>
 			<th>UUID</th>
 			<th>URL</th>
-			<th>CreatedAt</th>
-			<th>UpdatedAt</th>
 		</tr>
 		</thead>
-		<tbody>
+		<tbody  id="table">
 		{{range .convert_logs}}
 		<tr>
-			<td><img src="{{.Url}}"></td>
+			<td><img src="{{.Url}}" width="200"></td>
 			<td>{{.ID}}</td>
 			<td>{{.UUID}}</td>
 			<td>{{.Url}}</td>
-			<td>{{.UpdatedAt.Format "2006-01-02"}}</td>
-			<td>{{.CreatedAt.Format "2006-01-02"}}</td>
 		</tr>
 		{{end}}
 		</tbody>
 	</table>
 	{{end}}
-
 </div>
 
 <!-- 
