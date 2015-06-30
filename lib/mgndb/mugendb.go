@@ -1,26 +1,25 @@
 package mugendb
 
 import (
-	"fmt"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
-	"goassimp/app/models"
 	"log"
+
+	"github.com/jinzhu/gorm"
+	_ "github.com/go-sql-driver/mysql"
+
+	"goassimp/app/models"
 )
 
 var (
 	Db gorm.DB
 )
 
-//		mugendb.InitDB(user, password, host, dbname)
 func InitDB(user string, password string, host string, dbname string) {
-	fmt.Println("called")
 	var err error
 
 	// connect mysql
 	// "root:@/godb?charset=utf8&parseTime=True&loc=Local"
 	op := user + ":" + password + "@" + host + "/?charset=utf8&parseTime=True&loc=Local"
-	fmt.Println(op)
+	log.Println(op)
 	Db, err = gorm.Open("mysql", op)
 	checkErr(err, "mysql Open failed.")
 
@@ -35,7 +34,6 @@ func InitDB(user string, password string, host string, dbname string) {
 	// Db.DB().Ping()
 	Db.DB().SetMaxIdleConns(10)
 	Db.DB().SetMaxOpenConns(100)
-
 	// migration
 	Db.AutoMigrate(&models.User{})
 	insertUser()
@@ -48,9 +46,8 @@ func checkErr(err error, msg string) {
 }
 
 func insertUser() {
-	// get
 	Db.Create(&models.User{Name: "Jinzhu"})
 	user := models.User{}
 	Db.First(&user)
-	log.Fatalln(user.Name, nil)
+	log.Println(user.Name, nil)
 }

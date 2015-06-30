@@ -27,10 +27,10 @@ func init() {
 
 	// register startup functions with OnAppStart
 	revel.OnAppStart(func() {
-		user := "root"
-		password := ""
-		host := "unix(/tmp/mysql.sock)"
-		dbname := "godb"
+		user := revel.Config.StringDefault("db.user", "root")
+		password := revel.Config.StringDefault("db.password", "")
+		host := revel.Config.StringDefault("db.host", "unix(/tmp/mysql.sock)")
+		dbname :=  revel.Config.StringDefault("db.dbname", "godb")
 		mugendb.InitDB(user, password, host, dbname)
 	}) // DBやテーブルの作成
 
