@@ -4,8 +4,8 @@ import (
 	"github.com/revel/revel"
 	"time"
 
-	"goassimp/app/lib/mgnredis"
-	"goassimp/app/lib/mgndb"
+	"goassimp/lib/mgnredis"
+	"goassimp/lib/mgndb"
 )
 
 func init() {

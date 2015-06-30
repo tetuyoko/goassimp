@@ -6,7 +6,7 @@ import (
 	"goassimp/app/models"
 	"goassimp/app/routes"
 
-	"goassimp/app/lib/mgnredis"
+	"goassimp/lib/mgnredis"
 )
 
 type Sand struct {

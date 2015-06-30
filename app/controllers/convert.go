@@ -7,9 +7,9 @@ import (
 	//"goassimp/app/routes"
 	"io"
 	"os"
-	"goassimp/app/lib/mgnredis"
 	"github.com/satori/go.uuid"
 	"time"
+	"goassimp/lib/mgnredis"
 )
 
 type Convert struct {
