@@ -6,12 +6,21 @@ import (
     "log"
 )
 
+var (
+    Db  gorm.DB
+)
+
 func InitDB() {
-   db, err := gorm.Open("mysql", "root:@/godb?charset=utf8&parseTime=True&loc=Local")
-   checkErr(err, "mysql Open failed.")
-   db.DB().Ping()
-   db.DB().SetMaxIdleConns(10)
-   db.DB().SetMaxOpenConns(100)
+    var err error
+    Db, err = gorm.Open("mysql", "root:@/godb?charset=utf8&parseTime=True&loc=Local")
+    checkErr(err, "mysql Open failed.")
+    Db.DB().Ping()
+    Db.DB().SetMaxIdleConns(10)
+    Db.DB().SetMaxOpenConns(100)
+    Db.SingularTable(true)
+
+     // migration
+     // db.CreateTable(&User{})
 }
 
 func checkErr(err error, msg string) {
