@@ -2,25 +2,52 @@
 {{template "header.html" .}}
 
 <div class="container">
+	<h1>Current Uploads</h1>
+
 	<div class="row">
 		<div class="span6">
 			<form method="post" action="{{url "Convert.Convert"}}" enctype="multipart/form-data">
-				<p>
-					<label for="source"><strong>Source*:</strong></label>
-					<input type="file" name="source" id="avatar" class="span6">
-				</p>
-				<hr>
-				<input type="submit" value="Upload" class="btn btn-large btn-success">
+			<p>
+				<label for="source"><strong>Source*:</strong></label>
+				<input type="file" name="source" id="avatar" class="span6">
+			</p>
+			<hr>
+			<input type="submit" value="Upload" class="btn btn-large btn-success">
 			</form>
 		</div>
-		<div class="span6">
-			<i>
-				Your avatar is expected to be in PNG or JPEG format.
-				Minimum allowed resolution is 150x150px.
-				Maximum file size is 2 MB.
-			</i>
-		</div>
 	</div>
+
+	{{if not .convert_logs}}
+	<p>
+		No Uploads Found
+	</p>
+	{{ else }}
+	<table>
+		<thead>
+		<tr>
+			<th>Preview</th>
+			<th>ID</th>
+			<th>UUID</th>
+			<th>URL</th>
+			<th>CreatedAt</th>
+			<th>UpdatedAt</th>
+		</tr>
+		</thead>
+		<tbody>
+		{{range .convert_logs}}
+		<tr>
+			<td><img src="{{.Url}}"></td>
+			<td>{{.ID}}</td>
+			<td>{{.UUID}}</td>
+			<td>{{.Url}}</td>
+			<td>{{.UpdatedAt.Format "2006-01-02"}}</td>
+			<td>{{.CreatedAt.Format "2006-01-02"}}</td>
+		</tr>
+		{{end}}
+		</tbody>
+	</table>
+	{{end}}
+
 </div>
 
 <!-- 

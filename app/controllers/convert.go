@@ -18,18 +18,11 @@ type Convert struct {
 }
 
 func (c *Convert) List() revel.Result {
-	//var id string = c.Params.Get("id")
-	//fmt.Println(id)
-	// 情報出力
-	// Zset順
-//	convert_logs := []models.ConvertLog{}
-	if err := mugendb.Db.Model(&models.ConvertLog{}).Order("created_at desc").Limit(10).Error; err != nil {
+	var convert_logs []models.ConvertLog
+	if err := mugendb.Db.Order("created_at desc").Limit(10).Find(&convert_logs).Error; err != nil {
 		panic(err)
 	}
-
-
-	//return c.Render(convert_logs)
-	return c.Render()
+	return c.Render(convert_logs)
 }
 
 func (c *Convert) Convert(source []byte) revel.Result {
