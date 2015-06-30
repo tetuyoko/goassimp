@@ -51,7 +51,9 @@ func (c *Convert) Convert(source []byte) revel.Result {
 		panic(err)
 	}
 	t := time.Now()
+
 	str := fmt.Sprintf("%s", t.Unix())
+
 	_, err = mgnredis.RedisDb.HSet(uuid, "created_at", str)
 	if err != nil {
 		panic(err)

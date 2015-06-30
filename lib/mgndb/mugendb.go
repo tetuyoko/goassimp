@@ -35,8 +35,9 @@ func InitDB(user string, password string, host string, dbname string) {
 	Db.DB().SetMaxIdleConns(10)
 	Db.DB().SetMaxOpenConns(100)
 	// migration
-	Db.AutoMigrate(&models.User{})
+	Db.AutoMigrate(&models.User{}, &models.ConvertLog{})
 	insertUser()
+	insertConvertLog()
 }
 
 func checkErr(err error, msg string) {
@@ -46,8 +47,16 @@ func checkErr(err error, msg string) {
 }
 
 func insertUser() {
-	Db.Create(&models.User{Name: "Jinzhu"})
+	Db.Create(&models.User{Name: "Jinzha"})
 	user := models.User{}
 	Db.First(&user)
 	log.Println(user.Name, nil)
+}
+
+func insertConvertLog() {
+	Db.Create(&models.ConvertLog{UUID: "Jinzhu", Path: "path/to/tmp"})
+	c := models.ConvertLog{}
+	Db.First(&c)
+	log.Println(c.UUID, nil)
+	log.Println(c.Path, nil)
 }
