@@ -11,6 +11,7 @@ import (
 	"goassimp/app/models"
 
 	"github.com/satori/go.uuid"
+	"os/exec"
 )
 
 type Convert struct {
@@ -72,6 +73,17 @@ func (c *Convert) Convert(userfile []byte) revel.Result {
 			"Status": status,
 		})
 	}
+
+	// 変換
+	_out, err := exec.Command("ls", "-la").Output()
+	if err != nil {
+		errs := fmt.Sprintf("%s", err)
+		status = "failed err" + errs
+		return c.RenderJson(map[string]interface{}{
+			"Status": status,
+		})
+	}
+	return c.RenderJson(_out)
 
 	// ログ保存
 	con := models.ConvertLog{UUID: uuid , Url: pth}

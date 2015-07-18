@@ -19,7 +19,6 @@ func InitDB(user string, password string, host string, dbname string) {
 	// connect mysql
 	// "root:@/godb?charset=utf8&parseTime=True&loc=Local"
 	op := user + ":" + password + "@" + host + "/?charset=utf8&parseTime=True&loc=Local"
-	log.Println(op)
 	Db, err = gorm.Open("mysql", op)
 	checkErr(err, "mysql Open failed.")
 
